@@ -87,7 +87,6 @@ const pilares = [
   { num:1, color:'#00c896', textColor:'#fff', title:'Sustentabilidade\nnos Negócios',   desc:'Neutralidade de carbono nas operações. Prevenção e mitigação de impactos ambientais.' },
   { num:2, color:'#00e5ff', textColor:'#000', title:'Gestão Baseada\nem Riscos',        desc:'Excelência em segurança de processo. Aprendizado contínuo e inovação para redução proativa de riscos.' },
   { num:3, color:'#8b5cf6', textColor:'#fff', title:'Respeito\nà Vida',                 desc:'Cultura justa de SMS baseada em confiança mútua, transparência e aprendizado.' },
-  { num:4, color:'#f59e0b', textColor:'#fff', title:'SMS\nÉ Valor',                     desc:'Zero fatalidade e zero vazamento. Metas integradas à estratégia e processos decisórios.' },
 ]
 
 function Slide2({ isActive }: { isActive?: boolean }) {
@@ -106,7 +105,7 @@ function Slide2({ isActive }: { isActive?: boolean }) {
           }}>SEGURANÇA, MEIO AMBIENTE E SAÚDE</div>
         <h2 style={{
           fontSize: 64, fontWeight: 800, color: '#fff', letterSpacing: '-1px',
-          }}>Os 4 Pilares SMS</h2>
+          }}>Os 3 Pilares SMS</h2>
       </div>
       <div style={{
         ...S.sep,
