@@ -36,31 +36,23 @@ const S = {
    SLIDE 1 — CAPA
 ═══════════════════════════════════════════════════════ */
 function Slide1() {
-  const [inView, setInView] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(0);
   
   const subtitleChars = "TRABALHO DE LOGÍSTICA".split("");
   const titleChars = "Segurança, Meio Ambiente e Saúde (SMS)".split("");
 
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) setInView(true);
-    }, { threshold: 0.1 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (inView && step === 0) {
+    // Para o Slide 1, sempre iniciar imediatamente, sem depender do IntersectionObserver
+    // pois ele é a capa e já está no topo.
+    if (step === 0) {
       setStep(1); // Inicia subtitle
       setTimeout(() => setStep(2), 1000); // Inicia title após 1s
       setTimeout(() => setStep(3), 2400); // Mostra o resto após 2.4s
     }
-  }, [inView, step]);
+  }, [step]);
 
   return (
-    <div id="s1" ref={ref} style={{
+    <div id="s1" style={{
       ...S.slide,
       background: 'linear-gradient(135deg,#0d1117 0%,#111827 60%,#0f172a 100%)',
       display: 'flex', flexDirection: 'column' as any,
@@ -646,7 +638,7 @@ function Slide8() {
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) setInView(true);
-    }, { threshold: 0.5 });
+    }, { threshold: 0.1 });
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
   }, []);
@@ -720,7 +712,7 @@ export default function App() {
       entries.forEach(e => {
         if (e.isIntersecting) setActive(e.target.id as SlideId)
       })
-    }, { threshold: 0.5 })
+    }, { threshold: 0.1 })
     SLIDES.forEach(id => {
       const el = document.getElementById(id)
       if (el) obs.observe(el)
