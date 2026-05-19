@@ -6,14 +6,14 @@ type SlideId = 's1'|'s2'|'s3'|'s4'|'s5'|'s6'|'s7'|'s8'
 /* ─── estilos inline compartilhados ─────────────────── */
 const S = {
   slide: {
-    width: 960,
-    height: 540,
+    width: '100%',
+    minHeight: '100vh',
     position: 'relative' as const,
     overflow: 'hidden' as const,
-    borderRadius: 4,
     flexShrink: 0,
-    scrollMarginTop: 52,
-    boxShadow: '0 20px 60px rgba(0,0,0,0.7)',
+    display: 'flex',
+    flexDirection: 'column' as any,
+    justifyContent: 'center',
   },
   bar: {
     position: 'absolute' as const,
@@ -22,14 +22,13 @@ const S = {
     background: 'linear-gradient(90deg,#00e5ff 0%,#8b5cf6 50%,#f59e0b 100%)',
   },
   eyebrow: {
-    fontSize: 11, fontWeight: 700,
-    letterSpacing: 3, textTransform: 'uppercase' as const,
+    fontSize: 20, fontWeight: 700,
+    letterSpacing: 4, textTransform: 'uppercase' as const,
     color: '#00e5ff', marginBottom: 8,
   },
   sep: {
     width: '100%', height: 1.5,
     background: 'linear-gradient(90deg,#00e5ff 0%,#8b5cf6 100%)',
-    marginBottom: 14,
   },
 }
 
@@ -41,8 +40,9 @@ function Slide1() {
     <div id="s1" style={{
       ...S.slide,
       background: 'linear-gradient(135deg,#0d1117 0%,#111827 60%,#0f172a 100%)',
-      display: 'flex', flexDirection: 'column', justifyContent: 'center',
-      padding: '56px 64px',
+      display: 'flex', flexDirection: 'column' as any,
+    justifyContent: 'center',
+      padding: '10vh 8vw', gap: '3vh',
     }}>
       {/* decorative circles */}
       <div style={{ position:'absolute', top:-60, right:-60, width:380, height:380, pointerEvents:'none' }}>
@@ -50,26 +50,26 @@ function Slide1() {
         <div style={{ position:'absolute', width:260, height:260, borderRadius:'50%', background:'rgba(30,40,70,0.7)', border:'1px solid rgba(0,229,255,0.15)', top:40, right:40 }}/>
       </div>
 
-      <div style={{ fontSize:11, fontWeight:700, letterSpacing:3, textTransform:'uppercase', color:'#00e5ff', marginBottom:24 }}>
+      <div style={{ fontSize:18, fontWeight:700, letterSpacing:3, textTransform:'uppercase', color:'#00e5ff', marginBottom: '6vh' }}>
         TRABALHO DE LOGÍSTICA
       </div>
-      <h1 style={{ fontSize:56, fontWeight:800, color:'#fff', lineHeight:1.1, maxWidth:560 }}>
-        Segurança, Meio Ambiente<br/>e Saúde (SMS)
+      <h1 style={{ fontSize: 82, fontWeight: 800, color: '#fff', lineHeight: 1.1, maxWidth: 1200, letterSpacing: '-2px' }}>
+        Segurança, Meio Ambiente e Saúde (SMS)
       </h1>
-      <div style={{ fontSize:18, color:'#94a3b8', marginTop:16, marginBottom:16 }}>
+      <div style={{ fontSize:18, color:'#fff', marginTop:16, marginBottom:16 }}>
         Normas Regulamentadoras &amp; Legislação Trabalhista
       </div>
-      <div style={{ width:120, height:3, background:'#00e5ff', marginBottom:24 }}/>
-      <div style={{ display:'flex', gap:10 }}>
+      <div style={{ width:120, height:3, background:'#00e5ff', marginBottom: '6vh' }}/>
+      <div style={{ display:'flex', gap: '2.5vh' }}>
         {['SMS','NRs','CLT','ISO 14000'].map(b => (
           <div key={b} style={{
             border:'1.5px solid rgba(0,229,255,0.4)', color:'#fff',
-            fontSize:13, fontWeight:700, padding:'8px 24px', borderRadius:2,
+            fontSize:24, fontWeight:700, padding:'8px 24px', borderRadius:2,
             background:'rgba(0,229,255,0.05)',
           }}>{b}</div>
         ))}
       </div>
-      <div style={{ position:'absolute', bottom:20, left:64, fontSize:13, color:'#94a3b8' }}>
+      <div style={{ position:'absolute', bottom:20, left:64, fontSize:13, color:'#fff' }}>
         18 de Maio de 2026 &nbsp;•&nbsp; Área de Logística
       </div>
       <div style={S.bar}/>
@@ -87,35 +87,67 @@ const pilares = [
   { num:4, color:'#f59e0b', textColor:'#fff', title:'SMS\nÉ Valor',                     desc:'Zero fatalidade e zero vazamento. Metas integradas à estratégia e processos decisórios.' },
 ]
 
-function Slide2() {
+function Slide2({ isActive }: { isActive?: boolean }) {
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      setInView(e.isIntersecting);
+    }, { threshold: 0.8 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <div id="s2" style={{
+    <div id="s2" ref={ref} style={{
       ...S.slide,
       background:'#0d1117',
       display:'flex', flexDirection:'column',
-      padding:'32px 48px 28px',
+      justifyContent:'flex-start',
+      padding: '12vh 8vw', gap: '3vh',
     }}>
-      <div style={S.eyebrow}>SEGURANÇA, MEIO AMBIENTE E SAÚDE</div>
-      <h2 style={{ fontSize:32, fontWeight:800, color:'#fff', marginBottom:12 }}>Os 4 Pilares SMS</h2>
-      <div style={S.sep}/>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, flex:1 }}>
-        {pilares.map(p => (
+      <div style={{ display:'flex', flexDirection:'column' }}>
+        <div style={{
+          ...S.eyebrow,
+          opacity: inView ? 1 : 0,
+          transform: inView ? 'translateY(0)' : 'translateY(30px)',
+          transition: 'all 0.8s ease 0s',
+        }}>SEGURANÇA, MEIO AMBIENTE E SAÚDE</div>
+        <h2 style={{
+          fontSize: 64, fontWeight: 800, color: '#fff', letterSpacing: '-1px',
+          opacity: inView ? 1 : 0,
+          transform: inView ? 'translateY(0)' : 'translateY(30px)',
+          transition: 'all 0.8s ease 0.1s',
+        }}>Os 4 Pilares SMS</h2>
+      </div>
+      <div style={{
+        ...S.sep,
+        opacity: inView ? 1 : 0,
+        transform: inView ? 'translateY(0)' : 'translateY(30px)',
+        transition: 'all 0.8s ease 0.2s',
+      }}/>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(250px, 1fr))', gap: '3vh', flex:1 }}>
+        {pilares.map((p, index) => (
           <div key={p.num} style={{
             background:'#1a2233', borderRadius:4,
             borderTop:`3px solid ${p.color}`,
-            padding:'20px 18px',
-            display:'flex', flexDirection:'column', gap:12,
+            padding:'28px 32px',
+            display:'flex', flexDirection:'column', gap: '3vh',
+            opacity: inView ? 1 : 0,
+            transform: inView ? 'translateY(0)' : 'translateY(30px)',
+            transition: `all 0.8s ease ${0.3 + index * 0.2}s`,
           }}>
             <div style={{ display:'flex', justifyContent:'center' }}>
               <div style={{
-                width:54, height:54, borderRadius:'50%',
+                width:72, height:72, borderRadius:'50%',
                 background:p.color, color:p.textColor,
                 display:'flex', alignItems:'center', justifyContent:'center',
-                fontSize:24, fontWeight:800,
+                fontSize:32, fontWeight:800,
               }}>{p.num}</div>
             </div>
-            <h3 style={{ fontSize:14, fontWeight:700, color:'#fff', textAlign:'center', lineHeight:1.3, whiteSpace:'pre-line' }}>{p.title}</h3>
-            <p style={{ fontSize:12, color:'#94a3b8', lineHeight:1.55 }}>{p.desc}</p>
+            <h3 style={{ fontSize:24, fontWeight:700, color:'#fff', textAlign:'center', lineHeight:1.3, whiteSpace:'pre-line' }}>{p.title}</h3>
+            <p style={{ fontSize:18, color:'#fff', lineHeight:1.55 }}>{p.desc}</p>
           </div>
         ))}
       </div>
@@ -128,51 +160,76 @@ function Slide2() {
    SLIDE 3 — O QUE SÃO NRs
 ═══════════════════════════════════════════════════════ */
 function Slide3() {
+  const [isActive, setIsActive] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      setIsActive(e.isIntersecting);
+    }, { threshold: 0.8 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <div id="s3" style={{
+    <div id="s3" ref={ref} style={{
       ...S.slide,
       background:'#0d1117',
       display:'flex', flexDirection:'column',
-      padding:'32px 48px 28px',
+      justifyContent:'flex-start',
+      padding: '12vh 8vw', gap: '3vh',
     }}>
-      <div style={S.eyebrow}>LEGISLAÇÃO &nbsp;●&nbsp; NR</div>
-      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:10 }}>
-        <h2 style={{ fontSize:42, fontWeight:800, color:'#fff', lineHeight:1.1, maxWidth:580 }}>
-          O que são as Normas<br/>Regulamentadoras?
-        </h2>
-        <div style={{ border:'1.5px solid #8b5cf6', borderRadius:4, padding:'14px 24px', textAlign:'center', minWidth:180 }}>
-          <div style={{ fontSize:22, fontWeight:800, color:'#8b5cf6' }}>Lei nº 6.514</div>
-          <div style={{ fontSize:14, color:'#fff', margin:'2px 0' }}>de 1977</div>
-          <div style={{ fontSize:11, color:'#94a3b8' }}>Ministério do Trabalho</div>
+      <div style={{
+        display:'flex', flexDirection:'column',
+        opacity: isActive ? 1 : 0, transform: isActive ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0s'
+      }}>
+        <div style={S.eyebrow}>LEGISLAÇÃO &nbsp;●&nbsp; NR</div>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+          <h2 style={{ fontSize:64, fontWeight:800, color:'#fff', lineHeight:1.1, letterSpacing: '-1px' }}>
+            O que são as Normas Regulamentadoras?
+          </h2>
+          <div style={{ border:'2px solid #8b5cf6', borderRadius:4, padding:'18px 32px', textAlign:'center', minWidth:220, flexShrink: 0 }}>
+            <div style={{ fontSize:28, fontWeight:800, color:'#8b5cf6' }}>Lei nº 6.514</div>
+            <div style={{ fontSize:18, color:'#fdfdfd', margin:'4px 0' }}>de 1977</div>
+            <div style={{ fontSize:14, color:'#fff' }}>Ministério do Trabalho</div>
+          </div>
         </div>
       </div>
-      <div style={S.sep}/>
       <div style={{
-        background:'#1a2233', borderLeft:'3px solid #8b5cf6',
-        borderRadius:'0 4px 4px 0', padding:'14px 20px',
-        fontSize:13, color:'#94a3b8', lineHeight:1.65, marginBottom:14,
+        ...S.sep,
+        opacity: isActive ? 1 : 0, transform: isActive ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.1s'
+      }}/>
+      <div style={{
+        background:'#1a2233', borderLeft:'4px solid #8b5cf6',
+        borderRadius:'0 4px 4px 0', padding:'24px 32px',
+        fontSize:20, color:'#fff', lineHeight:1.65,
+        opacity: isActive ? 1 : 0, transform: isActive ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.2s'
       }}>
         São disposições complementares ao Capítulo V do Título II da CLT, introduzidas pela Lei nº 6.514/1977, que atribuiu ao Ministério do Trabalho a competência para estabelecê-las. Seu objetivo é prevenir acidentes e doenças ocupacionais.
       </div>
       <div style={{
         background:'#1a2233', border:'1px solid rgba(0,229,255,0.25)',
-        borderRadius:4, padding:'12px 20px',
-        display:'flex', gap:20, alignItems:'flex-start', marginBottom:14,
+        borderRadius:4, padding:'24px 32px',
+        display:'flex', gap:28, alignItems:'flex-start',
+        opacity: isActive ? 1 : 0, transform: isActive ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.3s'
       }}>
-        <div style={{ fontSize:14, fontWeight:700, color:'#00e5ff', whiteSpace:'nowrap' }}>Art. 1°</div>
-        <p style={{ fontSize:12, color:'#94a3b8', lineHeight:1.6, fontStyle:'italic' }}>
+        <div style={{ fontSize:32, fontWeight:800, color:'#00e5ff', whiteSpace:'nowrap' }}>Art. 1°</div>
+        <p style={{ fontSize:18, color:'#fff', lineHeight:1.6, fontStyle:'italic' }}>
           As NRs são de observância obrigatória pelas empresas privadas e públicas e pelos órgãos dos Poderes Legislativo e Judiciário, que possuam empregados regidos pela CLT.
         </p>
       </div>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(350px, 1fr))', gap: '3vh' }}>
         {[
           { color:'#00e5ff', title:'Obrigatoriedade', text:'Aplicável ao setor público e privado, incluindo os Poderes Legislativo e Judiciário com empregados CLT.' },
           { color:'#00c896', title:'Objetivo Principal', text:'Prevenir acidentes e doenças ocupacionais em todos os ambientes de trabalho.' },
           { color:'#8b5cf6', title:'Aplicação', text:'Abrange todos os setores que possuam empregados regidos pela Consolidação das Leis do Trabalho.' },
-        ].map(b => (
-          <div key={b.title} style={{ background:'#1a2233', borderRadius:4, borderTop:`2px solid ${b.color}`, padding:'12px 14px' }}>
-            <h4 style={{ fontSize:13, fontWeight:700, color:'#fff', marginBottom:5 }}>{b.title}</h4>
-            <p style={{ fontSize:11, color:'#94a3b8', lineHeight:1.5 }}>{b.text}</p>
+        ].map((b, i) => (
+          <div key={b.title} style={{
+            background:'#1a2233', borderRadius:4, borderTop:`3px solid ${b.color}`, padding:'20px 24px',
+            opacity: isActive ? 1 : 0, transform: isActive ? 'translateX(0)' : 'translateX(-40px)', transition: `all 0.6s ease ${0.4 + i*0.15}s`
+          }}>
+            <h4 style={{ fontSize:20, fontWeight:700, color:'#fff', marginBottom:10 }}>{b.title}</h4>
+            <p style={{ fontSize:16, color:'#fff', lineHeight:1.6 }}>{b.text}</p>
           </div>
         ))}
       </div>
@@ -191,51 +248,87 @@ const nrs = [
 ]
 
 function Slide4() {
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      setInView(e.isIntersecting);
+    }, { threshold: 0.8 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <div id="s4" style={{
+    <div id="s4" ref={ref} style={{
       ...S.slide,
       background:'#0d1117',
-      display:'grid', gridTemplateColumns:'280px 1fr',
+      display:'flex', flexDirection:'column',
+      justifyContent:'flex-start',
+      padding: '12vh 8vw', gap: '3vh',
     }}>
       <div style={{
-        background:'#111827', padding:'44px 32px',
-        display:'flex', flexDirection:'column', justifyContent:'center', gap:12,
-        borderRight:'1px solid rgba(255,255,255,0.1)',
+        display:'flex', flexDirection:'column',
+        opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0s'
       }}>
-        <h2 style={{ fontSize:36, fontWeight:900, color:'#fff', lineHeight:1.05, textTransform:'uppercase' }}>
-          NORMAS<br/>REGULAMEN-<br/>TADORAS
-        </h2>
-        <div style={{ width:60, height:3, background:'#00e5ff' }}/>
-        <p style={{ fontSize:13, color:'#94a3b8', lineHeight:1.55 }}>
-          Prevenção de acidentes e doenças ocupacionais em todos os setores.
-        </p>
-        <p style={{ fontSize:12, fontWeight:700, color:'#00e5ff', marginTop:12, lineHeight:1.6 }}>
-          Lei nº 6.514/1977<br/>Ministério do Trabalho
-        </p>
+        <div style={S.eyebrow}>LEGISLAÇÃO &nbsp;●&nbsp; NR</div>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+          <h2 style={{ fontSize: 64, fontWeight: 800, color: '#fff', letterSpacing: '-1px' }}>
+            Normas Regulamentadoras
+          </h2>
+          <div style={{ border:'2px solid #00e5ff', borderRadius:4, padding:'18px 32px', textAlign:'center', minWidth:220 }}>
+            <div style={{ fontSize:28, fontWeight:800, color:'#00e5ff' }}>Lei nº 6.514</div>
+            <div style={{ fontSize:18, color:'#fff', margin:'4px 0' }}>de 1977</div>
+            <div style={{ fontSize:14, color:'#fff' }}>Ministério do Trabalho</div>
+          </div>
+        </div>
       </div>
+      
       <div style={{
-        padding:'36px 36px',
-        display:'flex', flexDirection:'column', justifyContent:'center', gap:14,
-        borderLeft:'2px solid rgba(0,229,255,0.2)',
+        ...S.sep,
+        opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.15s'
+      }}/>
+      
+      <p style={{
+        fontSize:22, color:'#fff', lineHeight:1.55,
+        opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.3s'
       }}>
-        {nrs.map(n => (
+        Prevenção de acidentes e doenças ocupacionais em todos os setores, garantindo um ambiente de trabalho mais seguro.
+      </p>
+      
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(400px, 1fr))', gap: '5vh 4vw', margin: '4vh -4vw 0' }}>
+        {nrs.map((n, i) => (
           <div key={n.num} style={{
-            background:'#1a2233', borderRadius:4,
-            borderLeft:`4px solid ${n.color}`,
-            padding:'16px 20px',
-            display:'flex', flexDirection:'column', gap:5,
+            background:'#1a2233', borderRadius:6,
+            borderTop:`4px solid ${n.color}`,
+            padding:'28px 32px',
+            display:'flex', flexDirection:'column', gap:10,
+            opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-40px)', transition: `all 0.6s ease ${0.45 + i*0.15}s`
           }}>
-            <div style={{ fontSize:16, fontWeight:700, color:n.color }}>{n.num}</div>
-            <div style={{ fontSize:13, fontWeight:700, color:'#fff' }}>{n.sub}</div>
-            <div style={{ fontSize:12, color:'#94a3b8', lineHeight:1.5 }}>{n.desc}</div>
+            <div style={{ fontSize:28, fontWeight:800, color:n.color }}>{n.num}</div>
+            <div style={{ fontSize:24, fontWeight:700, color:'#fff' }}>{n.sub}</div>
+            <div style={{ fontSize:18, color:'#fff', lineHeight:1.6 }}>{n.desc}</div>
           </div>
         ))}
+      </div>
+      <div style={{
+        position: 'absolute',
+        bottom: 20,
+        left: 0,
+        right: 0,
+        textAlign: 'center',
+        fontSize: 14,
+        color: '#8b949e',
+        opacity: inView ? 1 : 0,
+        transform: inView ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'all 0.6s ease 0.9s'
+      }}>
+        AEP - Avaliação Ergonômica Preliminar &nbsp;|&nbsp; AET - Análise Ergonômica do Trabalho
       </div>
       <div style={S.bar}/>
     </div>
   )
 }
-
 /* ═══════════════════════════════════════════════════════
    SLIDE 5 — NR 19, NR 25 & ISO 14000
 ═══════════════════════════════════════════════════════ */
@@ -254,12 +347,15 @@ function Slide5() {
       ...S.slide,
       background:'#0d1117',
       display:'flex', flexDirection:'column',
-      padding:'28px 48px 24px',
+      justifyContent:'flex-start',
+      padding: '12vh 8vw', gap: '3vh',
     }}>
-      <div style={S.eyebrow}>NORMAS REGULAMENTADORAS</div>
-      <h2 style={{ fontSize:36, fontWeight:800, color:'#fff', marginBottom:10 }}>NR 19, NR 25 &amp; ISO 14000</h2>
+      <div style={{ display:'flex', flexDirection:'column' }}>
+        <div style={S.eyebrow}>NORMAS REGULAMENTADORAS</div>
+        <h2 style={{ fontSize:64, fontWeight:800, color:'#fff', letterSpacing: '-1px' }}>NR 19, NR 25 &amp; ISO 14000</h2>
+      </div>
       <div style={S.sep}/>
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:12 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(400px, 1fr))', gap: '3vh' }}>
         {[
           { color:'#8b5cf6', title:'NR 19 — Explosivos', items:[
             'Requisitos para fabricação, manuseio, armazenamento e transporte.',
@@ -272,12 +368,12 @@ function Slide5() {
             'Conforme Lei Federal nº 12.305/2010 — Política Nacional de Resíduos Sólidos.',
           ]},
         ].map(b => (
-          <div key={b.title} style={{ background:'#1a2233', borderRadius:4, borderTop:`3px solid ${b.color}`, padding:'14px 18px' }}>
-            <h3 style={{ fontSize:14, fontWeight:700, color:'#fff', marginBottom:8 }}>{b.title}</h3>
+          <div key={b.title} style={{ background:'#1a2233', borderRadius:4, borderTop:`3px solid ${b.color}`, padding:'28px 32px' }}>
+            <h3 style={{ fontSize:24, fontWeight:700, color:'#fff', marginBottom:8 }}>{b.title}</h3>
             <ul style={{ listStyle:'none', display:'flex', flexDirection:'column', gap:5 }}>
               {b.items.map((it,i) => (
-                <li key={i} style={{ fontSize:12, color:'#94a3b8', lineHeight:1.5, paddingLeft:16, position:'relative' }}>
-                  <span style={{ position:'absolute', left:0, color:'#00e5ff', fontSize:8, top:3 }}>●</span>
+                <li key={i} style={{ fontSize:18, color:'#fff', lineHeight:1.5, paddingLeft:16, position:'relative' }}>
+                  <span style={{ position:'absolute', left:0, color:'#00e5ff', fontSize:12, top:5 }}>●</span>
                   {it}
                 </li>
               ))}
@@ -285,17 +381,17 @@ function Slide5() {
           </div>
         ))}
       </div>
-      <div style={{ background:'#1a2233', borderRadius:4, border:'1px solid rgba(0,229,255,0.2)', padding:'12px 18px' }}>
-        <h3 style={{ fontSize:14, fontWeight:700, color:'#00e5ff', marginBottom:5 }}>ISO 14000 — Gestão Ambiental Internacional</h3>
-        <p style={{ fontSize:11.5, color:'#94a3b8', lineHeight:1.55, marginBottom:10 }}>
+      <div style={{ background:'#1a2233', borderRadius:4, border:'1px solid rgba(0,229,255,0.2)', padding:'28px 32px', marginLeft: '-4vw', marginRight: '-4vw' }}>
+        <h3 style={{ fontSize:24, fontWeight:700, color:'#00e5ff', marginBottom:5 }}>ISO 14000 — Gestão Ambiental Internacional</h3>
+        <p style={{ fontSize:18, color:'#fff', lineHeight:1.55, marginBottom: '3vh' }}>
           Conjunto de normas do Comitê ISO/TC 207 para identificar, controlar e minimizar impactos ambientais. A ISO 14001 é a única certificável da família, definindo a estrutura para implementação de um Sistema de Gestão Ambiental (SGA) eficaz.
         </p>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:6 }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(6, 1fr)', gap:8 }}>
           {isoCells.map(c => (
-            <div key={c.sc} style={{ background:'#111827', borderRadius:3, border:`1px solid ${c.color}55`, padding:'7px 10px' }}>
-              <div style={{ fontSize:11, fontWeight:800, color:c.color, marginBottom:2 }}>{c.sc}</div>
-              <div style={{ fontSize:11, fontWeight:700, color:'#fff', marginBottom:2 }}>{c.title}</div>
-              <div style={{ fontSize:10.5, color:'#94a3b8', lineHeight:1.4 }}>{c.desc}</div>
+            <div key={c.sc} style={{ background:'#111827', borderRadius:3, border:`1px solid ${c.color}55`, padding:'16px 20px' }}>
+              <div style={{ fontSize:16, fontWeight:800, color:c.color, marginBottom:2 }}>{c.sc}</div>
+              <div style={{ fontSize:18, fontWeight:700, color:'#fff', marginBottom:2 }}>{c.title}</div>
+              <div style={{ fontSize:16, color:'#fff', lineHeight:1.4 }}>{c.desc}</div>
             </div>
           ))}
         </div>
@@ -314,43 +410,46 @@ function Slide6() {
       ...S.slide,
       background:'#0d1117',
       display:'flex', flexDirection:'column',
-      padding:'28px 48px 20px',
+      justifyContent:'flex-start',
+      padding: '12vh 8vw', gap: '3vh',
     }}>
-      <div style={{ ...S.eyebrow, color:'#00e5ff' }}>LEGISLAÇÃO TRABALHISTA</div>
-      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
-        <h2 style={{ fontSize:38, fontWeight:800, color:'#fff' }}>CLT e Carteira de Trabalho</h2>
-        <div style={{ border:'2px solid #f59e0b', borderRadius:4, padding:'10px 22px', textAlign:'center', minWidth:150 }}>
-          <div style={{ fontSize:40, fontWeight:900, color:'#f59e0b', lineHeight:1 }}>1943</div>
-          <div style={{ fontSize:12, color:'#94a3b8', marginTop:3 }}>Criação da CLT</div>
+      <div style={{ display:'flex', flexDirection:'column' }}>
+        <div style={{ ...S.eyebrow, color:'#00e5ff' }}>LEGISLAÇÃO TRABALHISTA</div>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+          <h2 style={{ fontSize:64, fontWeight:800, color:'#fff', letterSpacing: '-1px' }}>CLT e Carteira de Trabalho</h2>
+          <div style={{ border:'2px solid #f59e0b', borderRadius:4, padding:'20px 32px', textAlign:'center', minWidth:200 }}>
+            <div style={{ fontSize:52, fontWeight:900, color:'#f59e0b', lineHeight:1 }}>1943</div>
+            <div style={{ fontSize:18, color:'#fff', marginTop:3 }}>Criação da CLT</div>
+          </div>
         </div>
       </div>
       <div style={{ ...S.sep, background:'linear-gradient(90deg,#f59e0b 0%,#00e5ff 100%)' }}/>
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, flex:1 }}>
-        <div style={{ background:'#1a2233', borderRadius:4, borderLeft:'3px solid #f59e0b', padding:'16px 18px', display:'flex', flexDirection:'column', gap:10 }}>
-          <h3 style={{ fontSize:14, fontWeight:700, color:'#fff' }}>CLT — Consolidação das Leis do Trabalho</h3>
-          <p style={{ fontSize:12, color:'#94a3b8', lineHeight:1.6 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(400px, 1fr))', gap: '3vh', flex:1 }}>
+        <div style={{ background:'#1a2233', borderRadius:4, borderLeft:'3px solid #f59e0b', padding:'28px 32px', display:'flex', flexDirection:'column', gap: '2.5vh' }}>
+          <h3 style={{ fontSize:24, fontWeight:700, color:'#fff' }}>CLT — Consolidação das Leis do Trabalho</h3>
+          <p style={{ fontSize:18, color:'#fff', lineHeight:1.6 }}>
             Criada por Getúlio Vargas em 1° de Maio de 1943, a CLT unificou normas trabalhistas e direitos fundamentais, protegendo o trabalhador e organizando as relações entre empregado e empregador.
           </p>
-          <p style={{ fontSize:12, color:'#94a3b8', lineHeight:1.6 }}>
+          <p style={{ fontSize:18, color:'#fff', lineHeight:1.6 }}>
             Ainda válida no mundo digital e do home office, a CLT precisa acompanhar as mudanças sem perder sua essência: proteção ao trabalhador.
           </p>
         </div>
-        <div style={{ background:'#1a2233', borderRadius:4, borderLeft:'3px solid #00e5ff', padding:'16px 18px', display:'flex', flexDirection:'column', gap:10 }}>
-          <h3 style={{ fontSize:14, fontWeight:700, color:'#fff' }}>CTPS — Carteira de Trabalho</h3>
-          <p style={{ fontSize:12, color:'#94a3b8', lineHeight:1.6 }}>
+        <div style={{ background:'#1a2233', borderRadius:4, borderLeft:'3px solid #00e5ff', padding:'28px 32px', display:'flex', flexDirection:'column', gap: '2.5vh' }}>
+          <h3 style={{ fontSize:24, fontWeight:700, color:'#fff' }}>CTPS — Carteira de Trabalho</h3>
+          <p style={{ fontSize:18, color:'#fff', lineHeight:1.6 }}>
             Criada em 1932 (Decreto 21.175). Em 1969 passou a se chamar Carteira de Trabalho e Previdência Social.
           </p>
-          <div style={{ fontSize:13, fontWeight:700, color:'#fff' }}>Garante ao trabalhador:</div>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:6 }}>
+          <div style={{ fontSize:24, fontWeight:700, color:'#fff' }}>Garante ao trabalhador:</div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(400px, 1fr))', gap:6 }}>
             {['Férias','13° Salário','FGTS','Aposentadoria'].map(b => (
               <div key={b} style={{
                 background:'rgba(0,229,255,0.08)', border:'1px solid rgba(0,229,255,0.3)',
-                borderRadius:3, padding:'8px 0', textAlign:'center',
-                fontSize:13, fontWeight:700, color:'#00e5ff',
+                borderRadius:3, padding:'14px 0', textAlign:'center',
+                fontSize:24, fontWeight:700, color:'#00e5ff',
               }}>{b}</div>
             ))}
           </div>
-          <p style={{ fontSize:11.5, color:'#94a3b8', fontStyle:'italic', lineHeight:1.5 }}>
+          <p style={{ fontSize:18, color:'#fff', fontStyle:'italic', lineHeight:1.5 }}>
             Art. 1°3: CTPS é obrigatória para exercício de qualquer emprego, inclusive temporário.
           </p>
         </div>
@@ -364,11 +463,11 @@ function Slide6() {
    SLIDE 7 — JORNADA & ADICIONAIS
 ═══════════════════════════════════════════════════════ */
 const stats = [
-  { val:'8h / dia',   lbl:'Jornada\ndiária máxima',       color:'#00e5ff', border:'rgba(0,229,255,0.4)' },
-  { val:'44h / sem.', lbl:'Jornada\nsemanal máxima',       color:'#00c896', border:'rgba(0,200,150,0.4)' },
-  { val:'+50%',       lbl:'Hora extra\ndias úteis',        color:'#f59e0b', border:'rgba(245,158,11,0.4)' },
-  { val:'+100%',      lbl:'Hora extra\ndomingos/feriados', color:'#8b5cf6', border:'rgba(139,92,246,0.4)' },
-  { val:'2h / dia',   lbl:'Limite de horas\nextras diárias', color:'#00e5ff', border:'rgba(0,229,255,0.4)' },
+  { prefix:'', num: 8, suffix:'h / dia',   lbl:'Jornada\ndiária máxima',       color:'#00e5ff', border:'rgba(0,229,255,0.4)' },
+  { prefix:'', num: 44, suffix:'h / sem.', lbl:'Jornada\nsemanal máxima',       color:'#00c896', border:'rgba(0,200,150,0.4)' },
+  { prefix:'+', num: 50, suffix:'%',       lbl:'Hora extra\ndias úteis',        color:'#f59e0b', border:'rgba(245,158,11,0.4)' },
+  { prefix:'+', num: 100, suffix:'%',      lbl:'Hora extra\ndomingos/feriados', color:'#8b5cf6', border:'rgba(139,92,246,0.4)' },
+  { prefix:'', num: 2, suffix:'h / dia',   lbl:'Limite de horas\nextras diárias', color:'#00e5ff', border:'rgba(0,229,255,0.4)' },
 ]
 const adics = [
   { color:'#00c896', title:'Insalubridade', items:[
@@ -391,37 +490,74 @@ const adics = [
   ]},
 ]
 
-function Slide7() {
+function AnimatedStat({ s, isActive }: { s: typeof stats[0], isActive?: boolean }) {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    if (isActive) {
+      let startTime: number | null = null;
+      let reqId: number;
+      const duration = 1500;
+      const animate = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const progress = timestamp - startTime;
+        const percentage = Math.min(progress / duration, 1);
+        const easeOut = 1 - Math.pow(1 - percentage, 3);
+        setCount(Math.floor(easeOut * s.num));
+        if (progress < duration) {
+          reqId = requestAnimationFrame(animate);
+        } else {
+          setCount(s.num);
+        }
+      };
+      reqId = requestAnimationFrame(animate);
+      return () => cancelAnimationFrame(reqId);
+    } else {
+      setCount(0);
+    }
+  }, [isActive, s.num])
+
+  return (
+    <div style={{
+      background:'#1a2233', borderRadius:4, border:`1px solid ${s.border}`,
+      padding:'24px 20px', textAlign:'center',
+      display:'flex', flexDirection:'column', alignItems:'center', gap:6,
+    }}>
+      <div style={{ fontSize:42, fontWeight:800, lineHeight:1, color:s.color }}>
+        {s.prefix}{count}{s.suffix}
+      </div>
+      <div style={{ fontSize:16, color:'#fff', lineHeight:1.3, textAlign:'center', whiteSpace:'pre-line' }}>{s.lbl}</div>
+    </div>
+  )
+}
+
+function Slide7({ isActive }: { isActive?: boolean }) {
   return (
     <div id="s7" style={{
       ...S.slide,
       background:'#0d1117',
       display:'flex', flexDirection:'column',
-      padding:'28px 48px 24px',
+      justifyContent:'flex-start',
+      padding: '12vh 8vw', gap: '3vh',
     }}>
-      <div style={S.eyebrow}>LEGISLAÇÃO TRABALHISTA</div>
-      <h2 style={{ fontSize:32, fontWeight:800, color:'#fff', marginBottom:10 }}>Jornada, Horas Extras &amp; Adicionais</h2>
+      <div style={{ display:'flex', flexDirection:'column' }}>
+        <div style={S.eyebrow}>LEGISLAÇÃO TRABALHISTA</div>
+        <h2 style={{ fontSize: 64, fontWeight: 800, color: '#fff', letterSpacing: '-1px' }}>Jornada, Horas Extras &amp; Adicionais</h2>
+      </div>
       <div style={S.sep}/>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:8, marginBottom:12 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap: '2vh' }}>
         {stats.map(s => (
-          <div key={s.val} style={{
-            background:'#1a2233', borderRadius:4, border:`1px solid ${s.border}`,
-            padding:'14px 10px', textAlign:'center',
-            display:'flex', flexDirection:'column', alignItems:'center', gap:6,
-          }}>
-            <div style={{ fontSize:28, fontWeight:800, lineHeight:1, color:s.color }}>{s.val}</div>
-            <div style={{ fontSize:11, color:'#94a3b8', lineHeight:1.3, textAlign:'center', whiteSpace:'pre-line' }}>{s.lbl}</div>
-          </div>
+          <AnimatedStat key={s.lbl} s={s} isActive={isActive} />
         ))}
       </div>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5vh' }}>
         {adics.map(a => (
-          <div key={a.title} style={{ background:'#1a2233', borderRadius:4, borderTop:`3px solid ${a.color}`, padding:'13px 15px' }}>
-            <h3 style={{ fontSize:13, fontWeight:700, color:'#fff', marginBottom:8 }}>{a.title}</h3>
+          <div key={a.title} style={{ background:'#1a2233', borderRadius:4, borderTop:`3px solid ${a.color}`, padding:'24px 32px' }}>
+            <h3 style={{ fontSize:24, fontWeight:700, color:'#fff', marginBottom:8 }}>{a.title}</h3>
             <ul style={{ listStyle:'none', display:'flex', flexDirection:'column', gap:5 }}>
               {a.items.map((it,i) => (
-                <li key={i} style={{ fontSize:11.5, color:'#94a3b8', lineHeight:1.4, paddingLeft:18, position:'relative' }}>
-                  <span style={{ position:'absolute', left:0, color:a.color, fontSize:9, top:2 }}>►</span>
+                <li key={i} style={{ fontSize:18, color:'#fff', lineHeight:1.4, paddingLeft:18, position:'relative' }}>
+                  <span style={{ position:'absolute', left:0, color:a.color, fontSize:14, top:3 }}>►</span>
                   {it}
                 </li>
               ))}
@@ -449,7 +585,8 @@ function Slide8() {
       ...S.slide,
       background:'linear-gradient(135deg,#0d1117 0%,#111827 100%)',
       display:'flex', flexDirection:'column',
-      padding:'52px 64px', justifyContent:'center',
+      justifyContent:'flex-start',
+      padding: '12vh 8vw', gap: '3vh',
     }}>
       {/* decorative circles */}
       <div style={{ position:'absolute', top:-40, right:-40, width:320, height:320, pointerEvents:'none' }}>
@@ -458,20 +595,22 @@ function Slide8() {
         <div style={{ position:'absolute', width:120, height:120, borderRadius:'50%', border:'1px solid rgba(0,229,255,0.15)', top:85, right:85 }}/>
       </div>
 
-      <div style={S.eyebrow}>CONCLUSÃO</div>
-      <h2 style={{ fontSize:48, fontWeight:800, color:'#fff', lineHeight:1.1, maxWidth:600, marginBottom:14 }}>
-        Uma Base Sólida para o<br/>Trabalhador e a Empresa
-      </h2>
-      <div style={{ width:120, height:3, background:'#00e5ff', marginBottom:32 }}/>
+      <div style={{ display:'flex', flexDirection:'column' }}>
+        <div style={S.eyebrow}>CONCLUSÃO</div>
+        <h2 style={{ fontSize:64, fontWeight:800, color:'#fff', lineHeight:1.1, maxWidth:800, letterSpacing: '-1px' }}>
+          Uma Base Sólida para o<br/>Trabalhador e a Empresa
+        </h2>
+      </div>
+      <div style={{ width:120, height:3, background:'#00e5ff', marginBottom: '8vh' }}/>
       <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
         {conclusoes.map((c,i) => (
           <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:18 }}>
-            <div style={{ width:22, height:22, borderRadius:'50%', background:c.color, flexShrink:0, marginTop:1 }}/>
-            <p style={{ fontSize:14, color:'#94a3b8', lineHeight:1.55 }}>{c.text}</p>
+            <div style={{ width:32, height:32, borderRadius:'50%', background:c.color, flexShrink:0, marginTop:4 }}/>
+            <p style={{ fontSize:22, color:'#fff', lineHeight:1.55 }}>{c.text}</p>
           </div>
         ))}
       </div>
-      <div style={{ position:'absolute', bottom:20, left:64, fontSize:13, color:'rgba(148,163,184,0.4)' }}>
+      <div style={{ position:'absolute', bottom:20, left:64, fontSize:13, color:'rgba(255,255,255,0.4)' }}>
         18 / 05 / 2026
       </div>
       <div style={S.bar}/>
@@ -516,12 +655,12 @@ export default function App() {
         display:'flex', alignItems:'center', justifyContent:'center',
         gap:6, padding:'8px 24px', zIndex:999,
       }}>
-        <span style={{ color:'#94a3b8', fontSize:11, marginRight:8, letterSpacing:1 }}>SLIDES</span>
+        <span style={{ color:'#fff', fontSize:11, marginRight:8, letterSpacing:1 }}>SLIDES</span>
         {SLIDES.map((id, i) => (
           <button key={id} onClick={() => go(id)} style={{
             background: active === id ? '#00e5ff' : 'rgba(255,255,255,0.06)',
             border: active === id ? '1px solid #00e5ff' : '1px solid rgba(255,255,255,0.12)',
-            color: active === id ? '#000' : '#94a3b8',
+            color: active === id ? '#000' : '#fff',
             fontSize:11, fontWeight:600,
             padding:'4px 12px', borderRadius:4,
             cursor:'pointer', transition:'all .15s',
@@ -533,16 +672,15 @@ export default function App() {
 
       {/* SLIDES */}
       <div style={{
-        display:'flex', flexDirection:'column', alignItems:'center',
-        paddingTop:56, paddingBottom:80, gap:40,
+        display:'flex', flexDirection:'column', alignItems:'center', width: '100%',
       }}>
         <Slide1 />
-        <Slide2 />
+        <Slide2 isActive={active === 's2'} />
         <Slide3 />
         <Slide4 />
         <Slide5 />
         <Slide6 />
-        <Slide7 />
+        <Slide7 isActive={active === 's7'} />
         <Slide8 />
       </div>
     </>
