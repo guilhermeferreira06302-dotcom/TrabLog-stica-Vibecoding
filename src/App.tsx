@@ -36,21 +36,7 @@ const S = {
    SLIDE 1 — CAPA
 ═══════════════════════════════════════════════════════ */
 function Slide1() {
-  const [step, setStep] = useState(0);
   
-  const subtitleChars = "TRABALHO DE LOGÍSTICA".split("");
-  const titleChars = "Segurança, Meio Ambiente e Saúde (SMS)".split("");
-
-  useEffect(() => {
-    // Para o Slide 1, sempre iniciar imediatamente, sem depender do IntersectionObserver
-    // pois ele é a capa e já está no topo.
-    if (step === 0) {
-      setStep(1); // Inicia subtitle
-      setTimeout(() => setStep(2), 1000); // Inicia title após 1s
-      setTimeout(() => setStep(3), 2400); // Mostra o resto após 2.4s
-    }
-  }, [step]);
-
   return (
     <div id="s1" style={{
       ...S.slide,
@@ -66,26 +52,14 @@ function Slide1() {
       </div>
 
       <div style={{ fontSize:24, fontWeight:700, letterSpacing:3, textTransform:'uppercase', color:'#00e5ff', marginBottom: '2vh', minHeight: 28 }}>
-        {subtitleChars.map((char, i) => (
-          <span key={i} style={{
-            opacity: step >= 1 ? 1 : 0,
-            transition: `opacity 0.1s ease ${i * 0.04}s`
-          }}>{char}</span>
-        ))}
-        {step === 1 && <span style={{ borderRight: '3px solid #00e5ff', marginLeft: 4, animation: 'blink 0.8s step-end infinite' }} />}
+        TRABALHO DE LOGÍSTICA
       </div>
       <h1 style={{ fontSize: 82, fontWeight: 800, color: '#fff', lineHeight: 1.1, maxWidth: 1200, letterSpacing: '-2px', minHeight: 180 }}>
-        {titleChars.map((char, i) => (
-          <span key={i} style={{
-            opacity: step >= 2 ? 1 : 0,
-            transition: `opacity 0.15s ease ${i * 0.035}s`
-          }}>{char}</span>
-        ))}
-        {step === 2 && <span style={{ borderRight: '5px solid #fff', marginLeft: 4, animation: 'blink 0.8s step-end infinite' }} />}
+        Segurança, Meio Ambiente e Saúde (SMS)
       </h1>
 
       <div style={{ width:120, height:3, background:'#00e5ff', marginBottom: '6vh' }}/>
-      <div style={{ display:'flex', gap: '2.5vh', opacity: step === 3 ? 1 : 0, transition: 'opacity 1s ease 0.3s' }}>
+      <div style={{ display:'flex', gap: '2.5vh', }}>
         {['SMS','NRs','CLT','ISO 14000'].map(b => (
           <div key={b} style={{
             border:'1.5px solid rgba(0,229,255,0.4)', color:'#fff',
@@ -117,19 +91,9 @@ const pilares = [
 ]
 
 function Slide2({ isActive }: { isActive?: boolean }) {
-  const [inView, setInView] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => {
-      setInView(e.isIntersecting);
-    }, { threshold: 0.8 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-
+  
   return (
-    <div id="s2" ref={ref} style={{
+    <div id="s2"  style={{
       ...S.slide,
       background:'#0d1117',
       display:'flex', flexDirection:'column',
@@ -139,23 +103,14 @@ function Slide2({ isActive }: { isActive?: boolean }) {
       <div style={{ display:'flex', flexDirection:'column' }}>
         <div style={{
           ...S.eyebrow,
-          opacity: inView ? 1 : 0,
-          transform: inView ? 'translateY(0)' : 'translateY(30px)',
-          transition: 'all 0.8s ease 0s',
-        }}>SEGURANÇA, MEIO AMBIENTE E SAÚDE</div>
+          }}>SEGURANÇA, MEIO AMBIENTE E SAÚDE</div>
         <h2 style={{
           fontSize: 64, fontWeight: 800, color: '#fff', letterSpacing: '-1px',
-          opacity: inView ? 1 : 0,
-          transform: inView ? 'translateY(0)' : 'translateY(30px)',
-          transition: 'all 0.8s ease 0.1s',
-        }}>Os 4 Pilares SMS</h2>
+          }}>Os 4 Pilares SMS</h2>
       </div>
       <div style={{
         ...S.sep,
-        opacity: inView ? 1 : 0,
-        transform: inView ? 'translateY(0)' : 'translateY(30px)',
-        transition: 'all 0.8s ease 0.2s',
-      }}/>
+        }}/>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(250px, 1fr))', gap: '3vh', flex:1 }}>
         {pilares.map((p, index) => (
           <div key={p.num} style={{
@@ -163,10 +118,7 @@ function Slide2({ isActive }: { isActive?: boolean }) {
             borderTop:`3px solid ${p.color}`,
             padding:'28px 32px',
             display:'flex', flexDirection:'column', gap: '3vh',
-            opacity: inView ? 1 : 0,
-            transform: inView ? 'translateY(0)' : 'translateY(30px)',
-            transition: `all 0.8s ease ${0.3 + index * 0.2}s`,
-          }}>
+            }}>
             <div style={{ display:'flex', justifyContent:'center' }}>
               <div style={{
                 width:72, height:72, borderRadius:'50%',
@@ -189,19 +141,9 @@ function Slide2({ isActive }: { isActive?: boolean }) {
    SLIDE 3 — O QUE SÃO NRs
 ═══════════════════════════════════════════════════════ */
 function Slide3() {
-  const [isActive, setIsActive] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => {
-      setIsActive(e.isIntersecting);
-    }, { threshold: 0.8 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-
+  
   return (
-    <div id="s3" ref={ref} style={{
+    <div id="s3"  style={{
       ...S.slide,
       background:'#0d1117',
       display:'flex', flexDirection:'column',
@@ -210,8 +152,7 @@ function Slide3() {
     }}>
       <div style={{
         display:'flex', flexDirection:'column',
-        opacity: isActive ? 1 : 0, transform: isActive ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0s'
-      }}>
+        }}>
         <div style={S.eyebrow}>LEGISLAÇÃO &nbsp;●&nbsp; NR</div>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
           <h2 style={{ fontSize:64, fontWeight:800, color:'#fff', lineHeight:1.1, letterSpacing: '-1px' }}>
@@ -226,22 +167,19 @@ function Slide3() {
       </div>
       <div style={{
         ...S.sep,
-        opacity: isActive ? 1 : 0, transform: isActive ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.1s'
-      }}/>
+        }}/>
       <div style={{
         background:'#1a2233', borderLeft:'4px solid #8b5cf6',
         borderRadius:'0 4px 4px 0', padding:'24px 32px',
         fontSize:20, color:'#fff', lineHeight:1.65,
-        opacity: isActive ? 1 : 0, transform: isActive ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.2s'
-      }}>
+        }}>
         São disposições complementares ao Capítulo V do Título II da CLT, introduzidas pela Lei nº 6.514/1977, que atribuiu ao Ministério do Trabalho a competência para estabelecê-las. Seu objetivo é prevenir acidentes e doenças ocupacionais.
       </div>
       <div style={{
         background:'#1a2233', border:'1px solid rgba(0,229,255,0.25)',
         borderRadius:4, padding:'24px 32px',
         display:'flex', gap:28, alignItems:'flex-start',
-        opacity: isActive ? 1 : 0, transform: isActive ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.3s'
-      }}>
+        }}>
         <div style={{ fontSize:32, fontWeight:800, color:'#00e5ff', whiteSpace:'nowrap' }}>Art. 1°</div>
         <p style={{ fontSize:18, color:'#fff', lineHeight:1.6, fontStyle:'italic' }}>
           As NRs são de observância obrigatória pelas empresas privadas e públicas e pelos órgãos dos Poderes Legislativo e Judiciário, que possuam empregados regidos pela CLT.
@@ -255,8 +193,7 @@ function Slide3() {
         ].map((b, i) => (
           <div key={b.title} style={{
             background:'#1a2233', borderRadius:4, borderTop:`3px solid ${b.color}`, padding:'20px 24px',
-            opacity: isActive ? 1 : 0, transform: isActive ? 'translateX(0)' : 'translateX(-40px)', transition: `all 0.6s ease ${0.4 + i*0.15}s`
-          }}>
+            }}>
             <h4 style={{ fontSize:20, fontWeight:700, color:'#fff', marginBottom:10 }}>{b.title}</h4>
             <p style={{ fontSize:16, color:'#fff', lineHeight:1.6 }}>{b.text}</p>
           </div>
@@ -277,19 +214,9 @@ const nrs = [
 ]
 
 function Slide4() {
-  const [inView, setInView] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => {
-      setInView(e.isIntersecting);
-    }, { threshold: 0.8 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-
+  
   return (
-    <div id="s4" ref={ref} style={{
+    <div id="s4"  style={{
       ...S.slide,
       background:'#0d1117',
       display:'flex', flexDirection:'column',
@@ -298,8 +225,7 @@ function Slide4() {
     }}>
       <div style={{
         display:'flex', flexDirection:'column',
-        opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0s'
-      }}>
+        }}>
         <div style={S.eyebrow}>LEGISLAÇÃO &nbsp;●&nbsp; NR</div>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
           <h2 style={{ fontSize: 64, fontWeight: 800, color: '#fff', letterSpacing: '-1px' }}>
@@ -315,13 +241,11 @@ function Slide4() {
       
       <div style={{
         ...S.sep,
-        opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.15s'
-      }}/>
+        }}/>
       
       <p style={{
         fontSize:22, color:'#fff', lineHeight:1.55,
-        opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.3s'
-      }}>
+        }}>
         Prevenção de acidentes e doenças ocupacionais em todos os setores, garantindo um ambiente de trabalho mais seguro.
       </p>
       
@@ -332,8 +256,7 @@ function Slide4() {
             borderTop:`4px solid ${n.color}`,
             padding:'28px 32px',
             display:'flex', flexDirection:'column', gap:10,
-            opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-40px)', transition: `all 0.6s ease ${0.45 + i*0.15}s`
-          }}>
+            }}>
             <div style={{ fontSize:28, fontWeight:800, color:n.color }}>{n.num}</div>
             <div style={{ fontSize:24, fontWeight:700, color:'#fff' }}>{n.sub}</div>
             <div style={{ fontSize:18, color:'#fff', lineHeight:1.6 }}>{n.desc}</div>
@@ -348,10 +271,7 @@ function Slide4() {
         textAlign: 'center',
         fontSize: 14,
         color: '#8b949e',
-        opacity: inView ? 1 : 0,
-        transform: inView ? 'translateY(0)' : 'translateY(20px)',
-        transition: 'all 0.6s ease 0.9s'
-      }}>
+        }}>
         AEP - Avaliação Ergonômica Preliminar &nbsp;|&nbsp; AET - Análise Ergonômica do Trabalho
       </div>
       <div style={S.bar}/>
@@ -371,19 +291,9 @@ const isoCells = [
 ]
 
 function Slide5() {
-  const [inView, setInView] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => {
-      setInView(e.isIntersecting);
-    }, { threshold: 0.8 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-
+  
   return (
-    <div id="s5" ref={ref} style={{
+    <div id="s5"  style={{
       ...S.slide,
       background:'#0d1117',
       display:'flex', flexDirection:'column',
@@ -392,15 +302,13 @@ function Slide5() {
     }}>
       <div style={{
         display:'flex', flexDirection:'column',
-        opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0s'
-      }}>
+        }}>
         <div style={S.eyebrow}>NORMAS REGULAMENTADORAS</div>
         <h2 style={{ fontSize:64, fontWeight:800, color:'#fff', letterSpacing: '-1px' }}>NR 19, NR 25 &amp; ISO 14000</h2>
       </div>
       <div style={{
         ...S.sep,
-        opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.15s'
-      }}/>
+        }}/>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(400px, 1fr))', gap: '3vh' }}>
         {[
           { color:'#8b5cf6', title:'NR 19 — Explosivos', items:[
@@ -416,8 +324,7 @@ function Slide5() {
         ].map((b, i) => (
           <div key={b.title} style={{
             background:'#1a2233', borderRadius:4, borderTop:`3px solid ${b.color}`, padding:'28px 32px',
-            opacity: inView ? 1 : 0, transform: inView ? 'translateX(0)' : 'translateX(-40px)', transition: `all 0.6s ease ${0.3 + i*0.15}s`
-          }}>
+            }}>
             <h3 style={{ fontSize:24, fontWeight:700, color:'#fff', marginBottom:8 }}>{b.title}</h3>
             <ul style={{ listStyle:'none', display:'flex', flexDirection:'column', gap:5 }}>
               {b.items.map((it,idx) => (
@@ -432,8 +339,7 @@ function Slide5() {
       </div>
       <div style={{
         background:'#1a2233', borderRadius:4, border:'1px solid rgba(0,229,255,0.2)', padding:'28px 32px', marginLeft: '-4vw', marginRight: '-4vw',
-        opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(-30px)', transition: 'all 0.6s ease 0.6s'
-      }}>
+        }}>
         <h3 style={{ fontSize:24, fontWeight:700, color:'#00e5ff', marginBottom:5 }}>ISO 14000 — Gestão Ambiental Internacional</h3>
         <p style={{ fontSize:18, color:'#fff', lineHeight:1.55, marginBottom: '3vh' }}>
           Conjunto de normas do Comitê ISO/TC 207 para identificar, controlar e minimizar impactos ambientais. A ISO 14001 é a única certificável da família, definindo a estrutura para implementação de um Sistema de Gestão Ambiental (SGA) eficaz.
@@ -442,8 +348,7 @@ function Slide5() {
           {isoCells.map((c, i) => (
             <div key={c.sc} style={{
               background:'#111827', borderRadius:3, border:`1px solid ${c.color}55`, padding:'16px 20px',
-              opacity: inView ? 1 : 0, transform: inView ? 'translateX(0)' : 'translateX(-20px)', transition: `all 0.6s ease ${0.75 + i*0.1}s`
-            }}>
+              }}>
               <div style={{ fontSize:16, fontWeight:800, color:c.color, marginBottom:2 }}>{c.sc}</div>
               <div style={{ fontSize:18, fontWeight:700, color:'#fff', marginBottom:2 }}>{c.title}</div>
               <div style={{ fontSize:16, color:'#fff', lineHeight:1.4 }}>{c.desc}</div>
@@ -545,33 +450,7 @@ const adics = [
   ]},
 ]
 
-function AnimatedStat({ s, isActive }: { s: typeof stats[0], isActive?: boolean }) {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    if (isActive) {
-      let startTime: number | null = null;
-      let reqId: number;
-      const duration = 1500;
-      const animate = (timestamp: number) => {
-        if (!startTime) startTime = timestamp;
-        const progress = timestamp - startTime;
-        const percentage = Math.min(progress / duration, 1);
-        const easeOut = 1 - Math.pow(1 - percentage, 3);
-        setCount(Math.floor(easeOut * s.num));
-        if (progress < duration) {
-          reqId = requestAnimationFrame(animate);
-        } else {
-          setCount(s.num);
-        }
-      };
-      reqId = requestAnimationFrame(animate);
-      return () => cancelAnimationFrame(reqId);
-    } else {
-      setCount(0);
-    }
-  }, [isActive, s.num])
-
+function StaticStat({ s }: { s: typeof stats[0] }) {
   return (
     <div style={{
       background:'#1a2233', borderRadius:4, border:`1px solid ${s.border}`,
@@ -579,7 +458,7 @@ function AnimatedStat({ s, isActive }: { s: typeof stats[0], isActive?: boolean 
       display:'flex', flexDirection:'column', alignItems:'center', gap:6,
     }}>
       <div style={{ fontSize:42, fontWeight:800, lineHeight:1, color:s.color }}>
-        {s.prefix}{count}{s.suffix}
+        {s.prefix}{s.num}{s.suffix}
       </div>
       <div style={{ fontSize:16, color:'#fff', lineHeight:1.3, textAlign:'center', whiteSpace:'pre-line' }}>{s.lbl}</div>
     </div>
@@ -602,7 +481,7 @@ function Slide7({ isActive }: { isActive?: boolean }) {
       <div style={S.sep}/>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap: '2vh' }}>
         {stats.map(s => (
-          <AnimatedStat key={s.lbl} s={s} isActive={isActive} />
+          <StaticStat key={s.lbl} s={s} />
         ))}
       </div>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5vh' }}>
@@ -629,29 +508,9 @@ function Slide7({ isActive }: { isActive?: boolean }) {
    SLIDE 8 — CONCLUSÃO
 ═══════════════════════════════════════════════════════ */
 function Slide8() {
-  const [inView, setInView] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const [step, setStep] = useState(0);
-
-  const textChars = "Obrigado!".split("");
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) setInView(true);
-    }, { threshold: 0.1 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (inView && step === 0) {
-      setStep(1); // Inicia digitação
-      setTimeout(() => setStep(2), 1500); // Mostra o sublinhado após terminar
-    }
-  }, [inView, step]);
-
+  
   return (
-    <div id="s8" ref={ref} style={{
+    <div id="s8"  style={{
       ...S.slide,
       background:'linear-gradient(135deg,#0d1117 0%,#111827 100%)',
       display:'flex', flexDirection:'column',
@@ -675,19 +534,12 @@ function Slide8() {
         alignItems: 'center',
         minHeight: 140
       }}>
-        {textChars.map((char, i) => (
-          <span key={i} style={{
-            opacity: step >= 1 ? 1 : 0,
-            transition: `opacity 0.1s ease ${i * 0.1}s`
-          }}>{char}</span>
-        ))}
-        {step === 1 && <span style={{ borderRight: '8px solid #fff', height: 100, marginLeft: 8, animation: 'blink 0.8s step-end infinite' }} />}
+        Obrigado!
       </h1>
       
       <div style={{ 
         width: 80, height: 4, background: '#00e5ff', marginTop: '2vh', zIndex: 10, borderRadius: 2,
-        opacity: step === 2 ? 1 : 0, transform: step === 2 ? 'scaleX(1)' : 'scaleX(0)', transition: 'all 0.8s ease'
-      }}/>
+        }}/>
 
       <div style={S.bar}/>
     </div>
@@ -739,8 +591,7 @@ export default function App() {
             color: active === id ? '#000' : '#fff',
             fontSize:11, fontWeight:600,
             padding:'4px 12px', borderRadius:4,
-            cursor:'pointer', transition:'all .15s',
-          }}>
+            cursor:'pointer', }}>
             {String(i+1).padStart(2,'0')}
           </button>
         ))}
